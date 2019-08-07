@@ -3,7 +3,7 @@ import math
 primes = [2]
 primeFactor = [{},{},{2},{3}]
 totients = [0,1,1]
-
+coTotients = []
 def GeneratePrimes(n):
 	cur = primes[len(primes)-1]+1
 	while cur <= n:
@@ -50,28 +50,28 @@ def EulerTotient(n):
 		return totients[n]
 
 def GetHighlyCotetientList(n):
-	cNum = 0
+	coList = []
 	count = 0
+	prev = 0
 	num = 2
-	coLi = []
-	while cNum < n:
-		lCount = 0
+	while count < n:
 		li = []
-		for i in range(num+1,num**2+1):
-			if num == i-EulerTotient(i):
-				lCount+=1
-				li += [i]
-				# print(num,i,i-EulerTotient(i))
-		if lCount > count:
-			count = lCount
-			cNum+=1
-			coLi.append(num)
+		for i in range((num-1)**2+1,num**2+1):
+			val = int(i-EulerTotient(i))
+			while len(coTotients) <= val:
+				coTotients.append([])
+			coTotients[val].append(i)
+		# print(coTotients[num])
+		if len(coTotients[num]) > prev:
+			prev = len(coTotients[num])
+			count += 1
+			coList.append(num)
 			print("----------------------------------------------------------------------------------------------------")
-			print(str(len(coLi))+" : "+str(num)+" "+str(li))
+			print(str(len(coList))+" : "+str(num)+" "+str(coTotients[num]))
 			print("----------------------------------------------------------------------------------------------------")
-		else: print(num,li)
+		else: print(num,str(coTotients[num]))
 		num+=1
-	return coLi
+	return coList
 
 length = int(input("Length : "))
 print("\nHighly Cototient Numbers : "+str(GetHighlyCotetientList(length)))
